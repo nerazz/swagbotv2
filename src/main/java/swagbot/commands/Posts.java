@@ -2,10 +2,9 @@ package swagbot.commands;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import swagbot.Objects.Impl.UserDataImpl;
-import swagbot.Objects.UserData;
+import swagbot.objects.impl.UserDataImpl;
+import swagbot.objects.UserData;
 import swagbot.util.impl.UserCacheImpl;
-import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;

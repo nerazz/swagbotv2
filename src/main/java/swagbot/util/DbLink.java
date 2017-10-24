@@ -1,8 +1,8 @@
 package swagbot.util;
 
 import swagbot.Bot;
-import swagbot.Objects.Impl.UserDataImpl;
-import swagbot.Objects.UserData;
+import swagbot.objects.impl.UserDataImpl;
+import swagbot.objects.UserData;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +22,7 @@ import java.util.List;
  * @author Niklas Zd
  * @since 26.09.17
  */
-public class DbLink {//FIXME: sqlexception: you need to set exactly 11 parameters on the prepstatement
+public class DbLink {
 	private static final Logger LOGGER = LogManager.getLogger(DbLink.class);
 	private static HikariDataSource dataSource;
 	private static DbLink instance;
@@ -68,10 +68,10 @@ public class DbLink {//FIXME: sqlexception: you need to set exactly 11 parameter
 		}
 	}
 
-	public UserData loadUser(IUser user) throws UserNotFoundException {
+	public UserData loadUser(long id) throws UserNotFoundException {
 		String selectQuery = "SELECT id, ticks, lastSeen, gems, level, exp, expRate, potDuration, reminder, swagPoints, swagLevel FROM SwagbotUsers WHERE id = ?";
 		try(Connection con = dataSource.getConnection(); PreparedStatement ps = con.prepareStatement(selectQuery)) {
-			ps.setLong(1, user.getLongID());
+			ps.setLong(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				return new UserDataImpl(
@@ -94,7 +94,7 @@ public class DbLink {//FIXME: sqlexception: you need to set exactly 11 parameter
 	}
 
 
-	public List<UserData> loadUsers(List<IUser> usersToLoad) {
+	public List<UserData> loadUsers(List<IUser> usersToLoad) {//IDEA: idsToLoad?
 		if (usersToLoad.isEmpty()) {
 			return new ArrayList<>();
 		}

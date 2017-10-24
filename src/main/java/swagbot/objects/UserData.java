@@ -1,4 +1,4 @@
-package swagbot.Objects;
+package swagbot.objects;
 
 import sx.blah.discord.handle.obj.IUser;
 

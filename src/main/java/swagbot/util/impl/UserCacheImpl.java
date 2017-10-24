@@ -1,6 +1,6 @@
 package swagbot.util.impl;
 
-import swagbot.Objects.UserData;
+import swagbot.objects.UserData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import swagbot.util.DbLink;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 /**
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
  */
 public class UserCacheImpl implements UserCache {
 	private static final Logger LOGGER = LogManager.getLogger(UserCacheImpl.class);
-	private final Map<Long, UserCacheObject> USER_CACHE = new ConcurrentHashMap<>();// IDEA: 26.09.17 oder lieber Collection.synchronized(Hashmap);
+	private final ConcurrentMap<Long, UserCacheObject> USER_CACHE = new ConcurrentHashMap<>();// IDEA: 26.09.17 oder lieber Collection.synchronized(Hashmap);
 	private static DbLink dbLink;
 	private static UserCacheImpl instance = new UserCacheImpl();
 
@@ -37,15 +38,14 @@ public class UserCacheImpl implements UserCache {
 	/**
 	 * gets user from cache or adds it if nonexistent
 	 *
-	 * @param user user to be retrieved
+	 * @param id id of user to be retrieved
 	 * @return retrieved userdata
 	 */
 	@Override
-	public UserData getUserData(IUser user) {//TODO: add if nonexistent
-		Long id = user.getLongID();
+	public UserData getUserData(long id) {//TODO: throws userNotFoundException
 		if(!USER_CACHE.containsKey(id)) {
 			try {
-				UserData userData = dbLink.loadUser(user);
+				UserData userData = dbLink.loadUser(id);
 				putInCache(userData);
 				return userData;
 			} catch(UserNotFoundException e) {
@@ -54,7 +54,7 @@ public class UserCacheImpl implements UserCache {
 		}
 		return USER_CACHE.get(id).setAccessed(true).getUserData();
 
-		/*synchronized (USER_CACHE) {
+			/*synchronized (USER_CACHE) {
 			if (!USER_CACHE.containsKey(id)) {
 				try {
 					UserCacheObject uco = new UserCacheObject(loadUserFromDb(user));
@@ -67,6 +67,17 @@ public class UserCacheImpl implements UserCache {
 			uco.setAccessed(true);
 			return uco.getUserData();
 		}*/
+	}
+
+	/**
+	 * gets user from cache or adds it if nonexistent
+	 *
+	 * @param user user to be retrieved
+	 * @return retrieved userdata
+	 */
+	@Override
+	public UserData getUserData(IUser user) {//TODO: add if nonexistent; putIfAbsent
+		return getUserData(user.getLongID());
 	}
 
 	/**

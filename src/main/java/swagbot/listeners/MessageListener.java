@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * @author Niklas Zd
  * @since 25.09.17
  */
-public final class MessageListener implements IListener<MessageReceivedEvent> {
+public final class MessageListener implements IListener<MessageReceivedEvent> {//TODO: refactor
 	private static final Logger LOGGER = LogManager.getLogger(MessageListener.class);
 	private static final long ADMIN_ID = 97092184821465088L;
 

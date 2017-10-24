@@ -3,6 +3,7 @@ package swagbot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import swagbot.listeners.*;
+import swagbot.rpc.RpcSocket;
 import swagbot.util.DbLink;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
@@ -12,6 +13,8 @@ import sx.blah.discord.util.DiscordException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +23,8 @@ public class Main {
 	private static final int BOT = 0;//0 == Testbot; 1 == Swagbot
 
 	public static void main(String[] args) {//TODO: log4j2 wieder umstellen
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		executor.execute(new RpcSocket());
 		String config;
 		if (BOT == 0) {
 			config = "/testbot.properties";

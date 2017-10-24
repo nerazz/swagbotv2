@@ -3,7 +3,7 @@ package swagbot.util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import swagbot.Bot;
-import swagbot.Objects.UserData;
+import swagbot.objects.UserData;
 import swagbot.util.impl.UserCacheImpl;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IUser;

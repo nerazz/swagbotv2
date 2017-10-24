@@ -1,15 +1,17 @@
-package swagbot.Objects.Impl;
+package swagbot.objects.impl;
 
-import swagbot.Objects.UserData;
+import swagbot.objects.UserData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sx.blah.discord.handle.obj.IUser;
+
+import java.text.DecimalFormat;
 
 /**
  * @author Niklas Zd
  * @since 25.09.17
  */
-public class UserDataImpl implements UserData {
+public class UserDataImpl implements UserData {//TODO: atomics oder synchronized benutzen
 	private static final Logger LOGGER = LogManager.getLogger(UserDataImpl.class);
 
 	private final long ID;// IDEA: 28.09.17 feld entfernen und einfach von user durchreichen?
@@ -127,14 +129,14 @@ public class UserDataImpl implements UserData {
 			//post(name + ", you have to be at least level 100.", Statics.tempBotSpam);//TODO: post
 			return;
 		}
-		int swagPointGain = (int)Math.ceil(Math.sqrt((double)gems / 10000.0) * ((double)swagLevel + 2.0) / ((double)swagPoints + 2.0)) + level - 100;
+		/*int swagPointGain = (int)Math.ceil(Math.sqrt((double)gems / 10000.0) * ((double)swagLevel + 2.0) / ((double)swagPoints + 2.0)) + level - 100;
 		swagPoints += swagPointGain;//TODO: bei stats o.Ä. theoretische SP anzeigen + gems zum nächesten
 		LOGGER.info("{} gained {} swagPoints by abandoning {} G", getName(), swagPointGain, gems);
 		gems = 0;
 		//TODO: ordentliches gem-abziehen, nicer post
 		level = 1;
 		swagLevel++;
-		LOGGER.info("{} now is swagLevel {} with {} swagPoints", getName(), swagLevel, swagPoints);//TODO: wieviele gems wurden abgezogen?
+		LOGGER.info("{} now is swagLevel {} with {} swagPoints", getName(), swagLevel, swagPoints);//TODO: wieviele gems wurden abgezogen?*/
 	}
 
 	@Override
@@ -169,7 +171,7 @@ public class UserDataImpl implements UserData {
 
 	@Override
 	public void setExpRate(int expRate) {
-
+		this.expRate = expRate;
 	}
 
 	@Override
@@ -179,17 +181,28 @@ public class UserDataImpl implements UserData {
 
 	@Override
 	public void setPotDuration(int potDuration) {
-
+		this.potDuration = potDuration;
 	}
 
 	@Override
 	public void reducePotDur() {
-
+		if (potDuration > 0) {
+			potDuration -= 1;
+			if (potDuration < 1) {
+				setExpRate(1000);
+				LOGGER.info("{} XPot empty", USER.getName());
+				/*if (reminder > 0) {
+					post("Hey, your XPot is empty...", user);//TODO: kauf und staffelung prüfen
+					LOGGER.info("{} got reminded", name);
+					reminder--;
+				}*/
+			}
+		}
 	}
 
 	@Override
 	public String getFormattedExpRate() {
-		return null;
+		return new DecimalFormat("#.##").format(((double)expRate) / 1000);
 	}
 
 	@Override
