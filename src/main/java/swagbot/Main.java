@@ -23,7 +23,7 @@ public class Main {
 	private static final int BOT = 0;//0 == Testbot; 1 == Swagbot
 
 	public static void main(String[] args) {//TODO: log4j2 wieder umstellen
-		ExecutorService executor = Executors.newSingleThreadExecutor();
+		ExecutorService executor = Executors.newSingleThreadExecutor();//TODO: in readylistener tun
 		executor.execute(new RpcSocket());
 		String config;
 		if (BOT == 0) {

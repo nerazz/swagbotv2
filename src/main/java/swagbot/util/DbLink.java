@@ -42,7 +42,7 @@ public class DbLink {
 
 
 	public void upsertUsers(List<IUser> usersToUpsert) {
-		String upsertQuery = "INSERT INTO SwagbotUsers (id, name) VALUES (?, ?) ON DUPLICATE KEY UPDATE id = id";
+		String upsertQuery = "INSERT INTO sb_users (id, name) VALUES (?, ?) ON DUPLICATE KEY UPDATE id = id";
 		try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(upsertQuery)) {
 			for (IUser user : usersToUpsert) {
 				ps.setLong(1, user.getLongID());
@@ -57,7 +57,7 @@ public class DbLink {
 	}
 
 	public void upsertUser(IUser user) {
-		String upsertQuery = "INSERT INTO SwagbotUsers (id, name) VALUES (?, ?) ON DUPLICATE KEY UPDATE id = id";
+		String upsertQuery = "INSERT INTO sb_users (id, name) VALUES (?, ?) ON DUPLICATE KEY UPDATE id = id";
 		try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(upsertQuery)) {
 			ps.setLong(1, user.getLongID());
 			ps.setString(2, user.getName());
@@ -69,7 +69,7 @@ public class DbLink {
 	}
 
 	public UserData loadUser(long id) throws UserNotFoundException {
-		String selectQuery = "SELECT id, ticks, lastSeen, gems, level, exp, expRate, potDuration, reminder, swagPoints, swagLevel FROM SwagbotUsers WHERE id = ?";
+		String selectQuery = "SELECT id, ticks, lastSeen, gems, level, exp, expRate, potDuration, reminder, swagPoints, swagLevel FROM sb_users WHERE id = ?";
 		try(Connection con = dataSource.getConnection(); PreparedStatement ps = con.prepareStatement(selectQuery)) {
 			ps.setLong(1, id);
 			ResultSet rs = ps.executeQuery();
@@ -98,7 +98,7 @@ public class DbLink {
 		if (usersToLoad.isEmpty()) {
 			return new ArrayList<>();
 		}
-		String selectQuery = "SELECT id, ticks, lastSeen, gems, level, exp, expRate, potDuration, reminder, swagPoints, swagLevel FROM SwagbotUsers WHERE id IN (";
+		String selectQuery = "SELECT id, ticks, lastSeen, gems, level, exp, expRate, potDuration, reminder, swagPoints, swagLevel FROM sb_users WHERE id IN (";
 		StringBuilder sb = new StringBuilder();
 		sb.append(selectQuery);
 		for (IUser user : usersToLoad) {
@@ -139,7 +139,7 @@ public class DbLink {
 			return;
 		}
 		String updateQuery =
-				"UPDATE SwagbotUsers SET " +
+				"UPDATE sb_users SET " +
 						"ticks = ?, " +
 						"lastSeen = ?, " +
 						"gems = ?, " +
@@ -175,7 +175,7 @@ public class DbLink {
 	}
 
 	public boolean addLinkedId(long userId, String secret) {//TODO: für alle methoden boolean-return-successwerte einführen
-		String updateQuery = "UPDATE Users SET linkedId = ? WHERE secret = ?;";// IDEA: 03.10.17 auch id zum schnelleren finden übergeben?
+		String updateQuery = "UPDATE hp_users SET discordId = ? WHERE secret = ?;";// IDEA: 03.10.17 auch id zum schnelleren finden übergeben?
 		try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(updateQuery)) {
 			ps.setLong(1, userId);
 			ps.setString(2, secret);
