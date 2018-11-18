@@ -14,8 +14,8 @@ import java.text.DecimalFormat;
 public class UserDataImpl implements UserData {//TODO: atomics oder synchronized benutzen
 	private static final Logger LOGGER = LogManager.getLogger(UserDataImpl.class);
 
-	private final long ID;// IDEA: 28.09.17 feld entfernen und einfach von user durchreichen?
-	private final IUser USER;
+	private final transient long ID;// IDEA: 28.09.17 feld entfernen und einfach von user durchreichen?
+	private final transient IUser USER;
 	private int ticks;
 	private long lastSeen;
 	private int gems;//TODO: getter exceptions?

@@ -2,6 +2,7 @@ package swagbot;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import swagbot.api.ApiServer;
 import swagbot.listeners.*;
 import swagbot.rpc.RpcSocket;
 import swagbot.util.DbLink;
@@ -23,9 +24,13 @@ public class Main {
 	private static final int BOT = 0;//0 == Testbot; 1 == Swagbot
 
 	public static void main(String[] args) {//TODO: log4j2 wieder umstellen
-		ExecutorService executor = Executors.newSingleThreadExecutor();//TODO: in readylistener tun
-		executor.execute(new RpcSocket());
-		String config;
+		ApiServer server = new ApiServer();
+		ExecutorService executor = Executors.newFixedThreadPool(10);
+		executor.submit(server);
+
+		//ExecutorService executor = Executors.newSingleThreadExecutor();//TODO: in readylistener tun
+		//executor.execute(new RpcSocket());//TODO: sollte spätestens in production wieder an (oder keine website-connection!!)
+		/*String config;
 		if (BOT == 0) {
 			config = "/testbot.properties";
 		} else {
@@ -54,7 +59,7 @@ public class Main {
 			dispatcher.registerListener(new MessageListener());
 		} catch(DiscordException e) {
 			LOGGER.catching(e);
-		}
+		}*/
 	}
 
 }

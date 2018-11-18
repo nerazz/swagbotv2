@@ -6,6 +6,7 @@ import swagbot.Bot;
 import swagbot.objects.UserData;
 import swagbot.util.impl.UserCacheImpl;
 import sx.blah.discord.api.IDiscordClient;
+import sx.blah.discord.handle.obj.ActivityType;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.StatusType;
 
@@ -31,7 +32,8 @@ public class TickTimer implements Runnable {
 	 * sets status text
 	 */
 	public TickTimer() {
-		BOT_CLIENT.changePlayingText("fresh online");
+		//BOT_CLIENT.changePlayingText("fresh online");
+		BOT_CLIENT.changePresence(StatusType.ONLINE, ActivityType.WATCHING, "you");
 	}
 
 	/**
@@ -55,11 +57,14 @@ public class TickTimer implements Runnable {
 				}
 
 				if (daysOnline != 0) {
-					BOT_CLIENT.changePlayingText(String.format("seit %dd %dh online", daysOnline, hoursOnline));
+					//BOT_CLIENT.changePlayingText(String.format("seit %dd %dh online", daysOnline, hoursOnline));
+					BOT_CLIENT.changePresence(StatusType.ONLINE, ActivityType.WATCHING, String.format("you for %dd %dh", daysOnline, hoursOnline));
 				} else if (hoursOnline != 0) {
-					BOT_CLIENT.changePlayingText(String.format("seit %dh %dm online", hoursOnline, minutesOnline));
+					//BOT_CLIENT.changePlayingText(String.format("seit %dh %dm online", hoursOnline, minutesOnline));
+					BOT_CLIENT.changePresence(StatusType.ONLINE, ActivityType.WATCHING, String.format("you for %dh %dm", hoursOnline, minutesOnline));
 				} else {
-					BOT_CLIENT.changePlayingText(String.format("seit %dm online", minutesOnline));
+					//BOT_CLIENT.changePlayingText(String.format("seit %dm online", minutesOnline));
+					BOT_CLIENT.changePresence(StatusType.ONLINE, ActivityType.WATCHING, String.format("you for %dm", minutesOnline));
 				}
 			}
 
